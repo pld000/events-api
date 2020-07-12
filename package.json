@@ -1,5 +1,5 @@
 {
-  "name": "node-js-getting-started",
+  "name": "events-api",
   "version": "0.3.0",
   "description": "A sample Node.js app using Express 4",
   "engines": {
@@ -11,8 +11,10 @@
     "test": "node test.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "ejs": "^2.5.6",
-    "express": "^4.15.2"
+    "express": "^4.15.2",
+    "pg": "^8.3.0"
   },
   "devDependencies": {
     "got": "^11.3.0",
@@ -20,11 +22,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/heroku/node-js-getting-started"
+    "url": "https://github.com/pld000/events-api.git"
   },
   "keywords": [
     "node",
-    "heroku",
     "express"
   ],
   "license": "MIT"
