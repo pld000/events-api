@@ -19,7 +19,12 @@ const INSERT_DATA_SCRIPT = `
   ) RETURNING *
 `;
 
+const SEARCH_EVENTS_SCRIPT = `
+  SELECT * FROM events WHERE theme ILIKE concat('%', $1::text, '%')
+`;
+
 module.exports = {
   CREATE_TABLE_SCRIPT,
-  INSERT_DATA_SCRIPT
+  INSERT_DATA_SCRIPT,
+  SEARCH_EVENTS_SCRIPT
 };

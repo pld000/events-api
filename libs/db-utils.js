@@ -1,5 +1,9 @@
 const {Pool} = require('pg');
-const {CREATE_TABLE_SCRIPT, INSERT_DATA_SCRIPT} = require('./db-scripts');
+const {
+  CREATE_TABLE_SCRIPT,
+  INSERT_DATA_SCRIPT,
+  SEARCH_EVENTS_SCRIPT
+} = require('./db-scripts');
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -20,38 +24,44 @@ const createTable = async (req, res) => {
   }
 };
 
-const insertData = async (req, res) => {
+const sendEvent = (req, res) => {
   const {body} = req;
   const query = {
     text: INSERT_DATA_SCRIPT,
     values: [body.fio, body.department, body.theme, body.content, body.file, body.date, body.time]
   };
-  try {
-    const client = await pool.connect();
-    const result = await client.query(query);
 
-    return res.send(result.rows[0]);
-  } catch (err) {
-    console.log(err);
-    res.send('Error ' + err);
-  }
+  return _makePgQuery(req, res, query)
+    .then((result) => res.send(result.rows[0]))
+    .catch((err) => {
+      console.log(err);
+      res.send('Error ' + err);
+    });
+};
+
+const searchEvent = (req, res) => {
+  const {q} = req.query;
+  const query = {
+    text: SEARCH_EVENTS_SCRIPT,
+    values: [q],
+  };
+
+  return _makePgQuery(req, res, query)
+    .then((result) => res.send(result.rows))
+    .catch((err) => {
+      console.log(err);
+      res.send('Error ' + err);
+    });
+};
+
+const _makePgQuery = (req, res, query) => {
+  return pool.connect()
+    .then((client) => client.query(query))
 };
 
 module.exports = {
   createTable,
-  insertData
+  sendEvent,
+  searchEvent
 };
 
-// const dbPage = async (req, res) => {
-//   try {
-//     const client = await pool.connect();
-//     const result = await client.query('SELECT * FROM test_table');
-//     const results = {'results': (result ? result.rows : null)};
-//     res.render('pages/db', results);
-//     // res.send(results)
-//     client.release();
-//   } catch (err) {
-//     console.log(err);
-//     res.send('Error ' + err);
-//   }
-// };
