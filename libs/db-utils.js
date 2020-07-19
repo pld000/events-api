@@ -1,4 +1,6 @@
 const {Pool} = require('pg');
+const aws = require('aws-sdk');
+
 const {
   CREATE_TABLE_SCRIPT,
   INSERT_DATA_SCRIPT,
@@ -11,6 +13,9 @@ const pool = new Pool({
   //   rejectUnauthorized: false
   // }
 });
+
+const S3_BUCKET = process.env.S3_BUCKET;
+aws.config.region = 'us-east-2';
 
 const createTable = async (req, res) => {
   try {
@@ -25,10 +30,14 @@ const createTable = async (req, res) => {
 };
 
 const sendEvent = (req, res) => {
-  const {body} = req;
+  const fields = req.fields;
+  const files = req.files;
+
   const query = {
     text: INSERT_DATA_SCRIPT,
-    values: [body.fio, body.department, body.theme, body.content, body.file, body.date, body.time]
+    values: [
+      fields.fio, fields.department, fields.theme, fields.content, fields.file, fields.date, fields.time
+    ]
   };
 
   return _makePgQuery(req, res, query)
