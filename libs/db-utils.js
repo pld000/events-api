@@ -1,5 +1,4 @@
 const {Pool} = require('pg');
-const aws = require('aws-sdk');
 
 const {
   CREATE_TABLE_SCRIPT,
@@ -13,9 +12,6 @@ const pool = new Pool({
   //   rejectUnauthorized: false
   // }
 });
-
-const S3_BUCKET = process.env.S3_BUCKET;
-aws.config.region = 'us-east-2';
 
 const createTable = async (req, res) => {
   try {

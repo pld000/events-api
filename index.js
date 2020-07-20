@@ -1,4 +1,10 @@
+if (process.env.NODE_ENV === 'dev') {
+  require('dotenv').config();
+  console.log('dotenv GO!GO!GO!');
+}
+
 const {createTable, sendEvent, searchEvent} = require('./libs/db-utils');
+const {signS3} = require('./libs/upload-utils');
 const cors = require('cors');
 const express = require('express');
 const path = require('path');
@@ -17,6 +23,8 @@ app.use(formidableMiddleware());
 
 app.get('/api/events', searchEvent);
 app.post('/api/events', sendEvent);
+
+app.get('/api/sign-s3', signS3);
 
 app.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
