@@ -12,7 +12,7 @@
     "start:dev": "NODE_ENV=dev && node index.js"
   },
   "dependencies": {
-    "aws-sdk": "^2.715.0",
+    "aws-sdk": "^2.814.0",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "ejs": "^2.5.6",
